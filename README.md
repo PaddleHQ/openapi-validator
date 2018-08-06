@@ -1,6 +1,8 @@
 # OpenApi Validator
 
-This package takes an OpenApi Version 3 spec file, converts it to a JSON Schema (draft 4). This is the used use validate a response.
+This package takes an [OpenApi 3]( schemahttps://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) schema file, converts it to a [JSON Schema (draft 4)](http://json-schema.org/specification-links.html#draft-4) so it can be used for validation.
+
+This is the used to validate a response that implements the `Psr\Http\Message\ResponseInterface.` interface against a given response in the OpenApi schema.
 
 ## Usage
 
