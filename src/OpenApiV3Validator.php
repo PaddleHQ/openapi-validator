@@ -84,15 +84,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     /**
      * Validate a response against the OpenApi schema
      *
-     * Needed to add some error handling to make common errors more clear
-     *
-     * @param ResponseInterface $response,
-     * @param string $pathName,
-     * @param string $method,
-     * @param int $responseCode,
-     * @param string $contentType
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function validate(
         ResponseInterface $response,
@@ -100,7 +92,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         string $method,
         int $responseCode,
         string $contentType = 'application/json'
-    ) {
+    ) : bool {
         $openApiV3ResponseSchema = $this->getResponseSchema($pathName, $method, $responseCode, $contentType);
         $jsonSchemaResponseSchema = $this->convertOpenApiV3ToJsonSchema($openApiV3ResponseSchema);
         $responseJson = json_decode($response->getBody());
@@ -109,6 +101,8 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         if (!$this->jsonSchemaValidator->isValid()) {
             throw new ResponseInvalidException($response, $openApiV3ResponseSchema, $this->jsonSchemaValidator->getErrors());
         }
+
+        return true;
     }
 
     /**

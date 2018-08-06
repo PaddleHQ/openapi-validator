@@ -1,0 +1,52 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Schema Test",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://example.com",
+      "description": "Test Schema"
+    }
+  ],
+  "paths": {
+    "/check/health": {
+      "get": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Health Check.",
+        "description": "Returns an OK",
+        "operationId": "api.check.user",
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthCheck": {
+        "description": "Default response from API server to check health",
+        "properties": {
+          "health": {
+            "description": "expect an OK response",
+            "type": "string"
+          }
+        },
+        "required": ["health"],
+        "type": "object"
+      }
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace PaddleHq\OpenApiValidator;
 
+use PaddleHq\OpenApiValidator\Exception\ResponseInvalidException;
 use Psr\Http\Message\ResponseInterface;
 
 interface OpenApiValidatorInterface
@@ -16,6 +17,8 @@ interface OpenApiValidatorInterface
      * @param string $method,
      * @param int $responseCode,
      * @param string $contentType
+     * @return bool - true if valid
+     * @throws ResponseInvalidException
      */
     public function validate(
         ResponseInterface $response,
@@ -23,5 +26,5 @@ interface OpenApiValidatorInterface
         string $method,
         int $responseCode,
         string $contentType
-    );
+    ) : bool;
 }
