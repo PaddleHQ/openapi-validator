@@ -4,10 +4,7 @@ namespace PaddleHq\OpenApiValidator\Tests\Unit;
 
 use JsonSchema\SchemaStorage;
 use PaddleHq\OpenApiValidator\OpenApiV3Validator;
-use League\JsonReference\Dereferencer;
-use League\JsonReference\ReferenceSerializer\InlineReferenceSerializer;
 use HSkrasek\OpenAPI\Converter;
-use JsonSchema\Validator;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
 

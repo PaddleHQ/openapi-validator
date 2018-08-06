@@ -68,7 +68,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     }
 
     /**
-     * Converts OpenApi v3 schema to json schema draft 4, adds it to storage
+     * Converts OpenApi v3 schema to json schema draft 4, adds it to storage.
      */
     private function setupValidator()
     {
@@ -90,7 +90,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     ): bool {
         $responseSchemaPath = $this->getResponseSchemaPath($pathName, $method, $responseCode, $contentType);
         $responseJson = json_decode($response->getBody());
-        $this->jsonSchemaValidator->validate($responseJson, (object)['$ref' => $responseSchemaPath]);
+        $this->jsonSchemaValidator->validate($responseJson, (object) ['$ref' => $responseSchemaPath]);
 
         if (!$this->jsonSchemaValidator->isValid()) {
             throw new ResponseInvalidException($response, $this->schemaStorage->resolveRef($responseSchemaPath), $this->jsonSchemaValidator->getErrors());

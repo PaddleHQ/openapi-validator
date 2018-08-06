@@ -24,7 +24,7 @@ class OpenApiValidatorFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException PHPUnit\Framework\Error\Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testV3ValidatorFileNotFound()
     {
