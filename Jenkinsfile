@@ -1,14 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage('Lint Style') {
-            steps {
-                sh 'make lint-style'
-            }
-        }
         stage('Composer Install') {
             steps {
                 sh 'make composer-install'
+            }
+        }
+        stage('Lint Style') {
+            steps {
+                sh 'make lint-style'
             }
         }
         stage('Run Unit Tests') {
