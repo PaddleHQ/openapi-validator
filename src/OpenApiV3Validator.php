@@ -2,16 +2,16 @@
 
 namespace PaddleHq\OpenApiValidator;
 
+use JsonSchema\Constraints\Factory;
+use JsonSchema\SchemaStorage;
 use PaddleHq\OpenApiValidator\Exception\ContentTypeNotFoundException;
 use PaddleHq\OpenApiValidator\Exception\MethodNotFoundException;
 use PaddleHq\OpenApiValidator\Exception\PathNotFoundException;
 use PaddleHq\OpenApiValidator\Exception\ResponseInvalidException;
 use PaddleHq\OpenApiValidator\Exception\ResponseNotFoundException;
-use League\JsonReference\Dereferencer;
 use HSkrasek\OpenAPI\Converter;
 use JsonSchema\Validator as JsonSchemaValidator;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 
 class OpenApiV3Validator implements OpenApiValidatorInterface
 {
@@ -21,19 +21,9 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     private $converter;
 
     /**
-     * @var Dereferencer
-     */
-    private $dereferencer;
-
-    /**
      * @var JsonSchemaValidator
      */
     private $jsonSchemaValidator;
-
-    /**
-     * @var stdClass
-     */
-    private $openApiV3Schema;
 
     /**
      * @var string
@@ -55,30 +45,35 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      */
     private $currentContentType;
 
+    /**
+     * @var SchemaStorage
+     */
+    private $schemaStorage;
+
+    /**
+     * @var string
+     */
+    private $openApiSchemaFileName;
+
     public function __construct(
-        string $openApiSchema,
+        string $openApiSchemaFileName,
         Converter $converter,
-        Dereferencer $dereferencer,
-        JsonSchemaValidator $jsonSchemaValidator
+        SchemaStorage $schemaStorage
     ) {
         $this->converter = $converter;
-        $this->dereferencer = $dereferencer;
-        $this->jsonSchemaValidator = $jsonSchemaValidator;
-        $this->setupSchema($openApiSchema);
+        $this->openApiSchemaFileName = $openApiSchemaFileName;
+        $this->schemaStorage = $schemaStorage;
+        $this->setupValidator();
+        $this->jsonSchemaValidator = new JsonSchemaValidator(new Factory($this->schemaStorage));
     }
 
     /**
-     * Expands all `$ref` and builds object that can be used by validator.
-     *
-     * NOTE - the json encode/decode is required as the json schema
-     * validator does not like the proxy objects the dereferencer uses.
-     *
-     * @param string $openApiSchema
+     * Converts OpenApi v3 schema to json schema draft 4, adds it to storage
      */
-    private function setupSchema(string $openApiSchema)
+    private function setupValidator()
     {
-        $schema = $this->dereferencer->dereference($openApiSchema);
-        $this->openApiV3Schema = json_decode(json_encode($schema));
+        $openApiSchema = json_decode(file_get_contents($this->openApiSchemaFileName));
+        $this->schemaStorage->addSchema($this->openApiSchemaFileName, $this->converter->convert($openApiSchema));
     }
 
     /**
@@ -86,20 +81,19 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      *
      * {@inheritdoc}
      */
-    public function validate(
+    public function validateResponse(
         ResponseInterface $response,
         string $pathName,
         string $method,
         int $responseCode,
         string $contentType = 'application/json'
     ): bool {
-        $openApiV3ResponseSchema = $this->getResponseSchema($pathName, $method, $responseCode, $contentType);
-        $jsonSchemaResponseSchema = $this->convertOpenApiV3ToJsonSchema($openApiV3ResponseSchema);
+        $responseSchemaPath = $this->getResponseSchemaPath($pathName, $method, $responseCode, $contentType);
         $responseJson = json_decode($response->getBody());
-        $this->jsonSchemaValidator->validate($responseJson, $jsonSchemaResponseSchema);
+        $this->jsonSchemaValidator->validate($responseJson, (object)['$ref' => $responseSchemaPath]);
 
         if (!$this->jsonSchemaValidator->isValid()) {
-            throw new ResponseInvalidException($response, $openApiV3ResponseSchema, $this->jsonSchemaValidator->getErrors());
+            throw new ResponseInvalidException($response, $this->schemaStorage->resolveRef($responseSchemaPath), $this->jsonSchemaValidator->getErrors());
         }
 
         return true;
@@ -111,41 +105,28 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param int    $responseCode
      * @param string $contentType
      *
-     * @return mixed
+     * @return string
      *
      * @throws ContentTypeNotFoundException
      * @throws MethodNotFoundException
      * @throws PathNotFoundException
      * @throws ResponseNotFoundException
      */
-    private function getResponseSchema(string $pathName, string $method, int $responseCode, string $contentType)
+    private function getResponseSchemaPath(string $pathName, string $method, int $responseCode, string $contentType): string
     {
         $this->setSchemaPath($pathName)
             ->setPathMethod($method)
             ->setResponseStatusCode($responseCode)
             ->setContentType($contentType);
 
-        return $this->openApiV3Schema
-            ->paths
-            ->{$this->currentPath}
-            ->{$this->currentMethod}
-            ->responses
-            ->{$this->currentResponseStatusCode}
-            ->content
-            ->{$this->currentContentType}
-            ->schema;
-    }
-
-    /**
-     * Converts a schema from OpenApi v3 to JsonSchema draft 4 for validation.
-     *
-     * @param stdClass $openApiV3Schema
-     *
-     * @return stdClass
-     */
-    private function convertOpenApiV3ToJsonSchema(stdClass $openApiV3Schema): stdClass
-    {
-        return $this->converter->convert($openApiV3Schema);
+        return sprintf(
+            '%s#paths/%s/%s/responses/%d/content/%s/schema',
+            $this->openApiSchemaFileName,
+            str_replace('/', '~1', $this->currentPath),
+            $this->currentMethod,
+            $this->currentResponseStatusCode,
+            str_replace('/', '~1', $this->currentContentType)
+        );
     }
 
     /**
@@ -157,7 +138,12 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      */
     private function setSchemaPath(string $pathName): self
     {
-        if (!property_exists($this->openApiV3Schema->paths, $pathName)) {
+        if (!property_exists(
+            $this->schemaStorage
+                ->getSchema($this->openApiSchemaFileName)
+                ->paths,
+            $pathName
+        )) {
             throw new PathNotFoundException($pathName);
         }
 
@@ -177,7 +163,13 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     {
         $method = strtolower($method);
 
-        if (!property_exists($this->openApiV3Schema->paths->{$this->currentPath}, $method)) {
+        if (!property_exists(
+            $this->schemaStorage
+                ->getSchema($this->openApiSchemaFileName)
+                ->paths
+                ->{$this->currentPath},
+            $method
+        )) {
             throw new MethodNotFoundException($method, $this->currentPath);
         }
 
@@ -196,7 +188,8 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     private function setResponseStatusCode(int $responseCode): self
     {
         if (!property_exists(
-            $this->openApiV3Schema
+            $this->schemaStorage
+                ->getSchema($this->openApiSchemaFileName)
                 ->paths
                 ->{$this->currentPath}
                 ->{$this->currentMethod}
@@ -221,7 +214,8 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     private function setContentType(string $contentType): self
     {
         if (!property_exists(
-            $this->openApiV3Schema
+            $this->schemaStorage
+                ->getSchema($this->openApiSchemaFileName)
                 ->paths
                 ->{$this->currentPath}
                 ->{$this->currentMethod}

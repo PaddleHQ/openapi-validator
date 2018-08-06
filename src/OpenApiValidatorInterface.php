@@ -22,7 +22,7 @@ interface OpenApiValidatorInterface
      *
      * @throws ResponseInvalidException
      */
-    public function validate(
+    public function validateResponse(
         ResponseInterface $response,
         string $pathName,
         string $method,

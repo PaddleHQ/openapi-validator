@@ -2,6 +2,7 @@
 
 namespace PaddleHq\OpenApiValidator\Tests\Unit;
 
+use JsonSchema\SchemaStorage;
 use PaddleHq\OpenApiValidator\OpenApiV3Validator;
 use League\JsonReference\Dereferencer;
 use League\JsonReference\ReferenceSerializer\InlineReferenceSerializer;
@@ -25,14 +26,11 @@ class OpenApiV3ValidatorTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $dereferencer = Dereferencer::draft4();
-        $dereferencer->setReferenceSerializer(new InlineReferenceSerializer());
 
         $this->validator = new OpenApiV3Validator(
             'file://'.dirname(__DIR__).'/fixtures/openapiv3-schema.json',
             new Converter(),
-            $dereferencer,
-            new Validator()
+            new SchemaStorage()
         );
     }
 
@@ -41,7 +39,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testPathDoesNotExist()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(404),
             '/path-does/not/exist',
             'GET',
@@ -54,7 +52,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testMethodDoesNotExist()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(404),
             '/check/health',
             'PUT',
@@ -67,7 +65,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testResponseDoesNotExist()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(404),
             '/check/health',
             'GET',
@@ -80,7 +78,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testContentTypeDoesNotExist()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(200),
             '/check/health',
             'GET',
@@ -94,7 +92,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testResponseIsInvalidEmpty()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(200, []),
             '/check/health',
             'GET',
@@ -107,7 +105,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testResponseIsInvalidWrongType()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(200, ['health' => 123]),
             '/check/health',
             'GET',
@@ -120,7 +118,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     public function testResponseIsInvalidMissingRequiredField()
     {
-        $this->validator->validate(
+        $this->validator->validateResponse(
             $this->mockResponse(200, ['other-field' => 'ok']),
             '/check/health',
             'GET',
@@ -131,7 +129,7 @@ class OpenApiV3ValidatorTest extends TestCase
     public function testResponseIsValid()
     {
         $this->assertTrue(
-            $this->validator->validate(
+            $this->validator->validateResponse(
                 $this->mockResponse(200, ['health' => 'ok']),
                 '/check/health',
                 'GET',
