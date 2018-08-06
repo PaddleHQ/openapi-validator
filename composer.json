@@ -1,5 +1,5 @@
 {
-  "name": "paddle-hq/openapi-validator",
+  "name": "paddlehq/openapi-validator",
   "require": {
     "php": "^7.1",
     "psr/http-message": "^1.0",
