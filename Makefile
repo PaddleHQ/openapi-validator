@@ -1,5 +1,9 @@
-COMPOSER_RUN=docker run --rm --tty --volume "${PWD}":/app composer
-PHP_RUN=docker run --rm --workdir /app --volume "${PWD}":/app php:7.1-cli-alpine
+# User & Group ID used in Dockerfile for correcting permissions
+UID=$(shell id -u `whoami`)
+GID=$(shell id -g `whoami`)
+
+COMPOSER_RUN=docker run --rm --tty --user $(UID):$(GID) --volume "${PWD}":/app composer
+PHP_RUN=docker run --rm --user $(UID):$(GID) --workdir /app --volume "${PWD}":/app php:7.1-cli-alpine
 
 composer-install:
 	$(COMPOSER_RUN) install --prefer-dist
