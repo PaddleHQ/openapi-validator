@@ -7,7 +7,6 @@ use Throwable;
 class ContentTypeNotFoundException extends Exception
 {
     /**
-     *
      * @param string         $contentType  Request Content Type
      * @param int            $responseCode Request Response Code
      * @param string         $method       Request Method

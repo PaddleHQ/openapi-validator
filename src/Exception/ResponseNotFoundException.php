@@ -7,7 +7,6 @@ use Throwable;
 class ResponseNotFoundException extends Exception
 {
     /**
-     *
      * @param int            $responseCode Request Response Code
      * @param string         $method       Request Method
      * @param string         $path         Request OpenApi Path

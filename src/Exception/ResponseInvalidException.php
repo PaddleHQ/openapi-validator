@@ -43,7 +43,7 @@ class ResponseInvalidException extends Exception
         return implode(
             "\n\n",
             array_map(
-                function(array $error): string {
+                function (array $error): string {
                     return sprintf(
                         "\tError: \n\t\tConstraint: %s\n\t\tProperty: %s\n\t\tMessage: %s\n",
                         $error['constraint'],

@@ -9,3 +9,9 @@ composer-update:
 
 test-unit:
 	$(PHP_RUN) php vendor/bin/phpunit --stop-on-failure
+
+lint-style: ## Run phpcs-fixer in lint mode
+	$(PHP_RUN) php vendor/bin/php-cs-fixer fix --config .php_cs --verbose --dry-run --using-cache=false
+
+fix-style: ## Run phpcs-fixer
+	$(PHP_RUN) php vendor/bin/php-cs-fixer fix --config .php_cs

@@ -7,8 +7,7 @@ use Throwable;
 class PathNotFoundException extends Exception
 {
     /**
-     *
-     * @param string         $path   Request OpenApi Path
+     * @param string         $path     Request OpenApi Path
      * @param int            $code
      * @param Throwable|null $previous
      */

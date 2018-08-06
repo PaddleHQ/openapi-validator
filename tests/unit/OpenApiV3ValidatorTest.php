@@ -17,7 +17,7 @@ class OpenApiV3ValidatorTest extends TestCase
      */
     private $validator;
 
-    private function mockResponse(int $statusCode, array $responseBody = []) : Response
+    private function mockResponse(int $statusCode, array $responseBody = []): Response
     {
         return new Response($statusCode, [], json_encode($responseBody));
     }
@@ -37,7 +37,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\PathNotFoundException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\PathNotFoundException
      */
     public function testPathDoesNotExist()
     {
@@ -50,7 +50,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\MethodNotFoundException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\MethodNotFoundException
      */
     public function testMethodDoesNotExist()
     {
@@ -63,7 +63,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\ResponseNotFoundException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseNotFoundException
      */
     public function testResponseDoesNotExist()
     {
@@ -76,7 +76,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\ContentTypeNotFoundException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\ContentTypeNotFoundException
      */
     public function testContentTypeDoesNotExist()
     {
@@ -90,7 +90,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
      */
     public function testResponseIsInvalidEmpty()
     {
@@ -103,7 +103,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
      */
     public function testResponseIsInvalidWrongType()
     {
@@ -116,7 +116,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
      */
     public function testResponseIsInvalidMissingRequiredField()
     {

@@ -24,7 +24,7 @@ class OpenApiValidatorFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException League\JsonReference\SchemaLoadingException
+     * @expectedException \League\JsonReference\SchemaLoadingException
      */
     public function testV3ValidatorFileNotFound()
     {

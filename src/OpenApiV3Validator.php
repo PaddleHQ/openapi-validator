@@ -68,7 +68,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     }
 
     /**
-     * Expands all `$ref` and builds object that can be used by validator
+     * Expands all `$ref` and builds object that can be used by validator.
      *
      * NOTE - the json encode/decode is required as the json schema
      * validator does not like the proxy objects the dereferencer uses.
@@ -82,7 +82,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     }
 
     /**
-     * Validate a response against the OpenApi schema
+     * Validate a response against the OpenApi schema.
      *
      * {@inheritdoc}
      */
@@ -92,7 +92,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         string $method,
         int $responseCode,
         string $contentType = 'application/json'
-    ) : bool {
+    ): bool {
         $openApiV3ResponseSchema = $this->getResponseSchema($pathName, $method, $responseCode, $contentType);
         $jsonSchemaResponseSchema = $this->convertOpenApiV3ToJsonSchema($openApiV3ResponseSchema);
         $responseJson = json_decode($response->getBody());
@@ -112,6 +112,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param string $contentType
      *
      * @return mixed
+     *
      * @throws ContentTypeNotFoundException
      * @throws MethodNotFoundException
      * @throws PathNotFoundException
@@ -136,7 +137,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     }
 
     /**
-     * Converts a schema from OpenApi v3 to JsonSchema draft 4 for validation
+     * Converts a schema from OpenApi v3 to JsonSchema draft 4 for validation.
      *
      * @param stdClass $openApiV3Schema
      *
@@ -151,11 +152,12 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param string $pathName
      *
      * @return OpenApiV3Validator
+     *
      * @throws PathNotFoundException
      */
     private function setSchemaPath(string $pathName): self
     {
-        if (! property_exists($this->openApiV3Schema->paths, $pathName)) {
+        if (!property_exists($this->openApiV3Schema->paths, $pathName)) {
             throw new PathNotFoundException($pathName);
         }
 
@@ -168,13 +170,14 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param string $method
      *
      * @return OpenApiV3Validator
+     *
      * @throws MethodNotFoundException
      */
     private function setPathMethod(string $method): self
     {
         $method = strtolower($method);
 
-        if (! property_exists($this->openApiV3Schema->paths->{$this->currentPath}, $method)) {
+        if (!property_exists($this->openApiV3Schema->paths->{$this->currentPath}, $method)) {
             throw new MethodNotFoundException($method, $this->currentPath);
         }
 
@@ -187,11 +190,12 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param int $responseCode
      *
      * @return OpenApiV3Validator
+     *
      * @throws ResponseNotFoundException
      */
     private function setResponseStatusCode(int $responseCode): self
     {
-        if (! property_exists(
+        if (!property_exists(
             $this->openApiV3Schema
                 ->paths
                 ->{$this->currentPath}
@@ -211,11 +215,12 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * @param string $contentType
      *
      * @return OpenApiV3Validator
+     *
      * @throws ContentTypeNotFoundException
      */
     private function setContentType(string $contentType): self
     {
-        if (! property_exists(
+        if (!property_exists(
             $this->openApiV3Schema
                 ->paths
                 ->{$this->currentPath}

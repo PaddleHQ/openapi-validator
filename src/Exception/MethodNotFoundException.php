@@ -7,9 +7,8 @@ use Throwable;
 class MethodNotFoundException extends Exception
 {
     /**
-     *
-     * @param string         $method Request Method
-     * @param string         $path   Request OpenApi Path
+     * @param string         $method   Request Method
+     * @param string         $path     Request OpenApi Path
      * @param int            $code
      * @param Throwable|null $previous
      */
