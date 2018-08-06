@@ -7,5 +7,5 @@ composer-install:
 composer-update:
 	$(COMPOSER_RUN) update --prefer-dist
 
-test:
+test-unit:
 	$(PHP_RUN) php vendor/bin/phpunit --stop-on-failure
