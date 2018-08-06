@@ -121,7 +121,7 @@ class OpenApiV3ValidatorTest extends TestCase
     public function testResponseIsInvalidMissingRequiredField()
     {
         $this->validator->validate(
-            $this->mockResponse(200, []),
+            $this->mockResponse(200, ['other-field' => 'ok']),
             '/check/health',
             'GET',
             200
