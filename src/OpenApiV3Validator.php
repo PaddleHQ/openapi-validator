@@ -9,14 +9,13 @@ use PaddleHq\OpenApiValidator\Exception\MethodNotFoundException;
 use PaddleHq\OpenApiValidator\Exception\PathNotFoundException;
 use PaddleHq\OpenApiValidator\Exception\ResponseInvalidException;
 use PaddleHq\OpenApiValidator\Exception\ResponseNotFoundException;
-use HSkrasek\OpenAPI\Converter;
 use JsonSchema\Validator as JsonSchemaValidator;
 use Psr\Http\Message\ResponseInterface;
 
 class OpenApiV3Validator implements OpenApiValidatorInterface
 {
     /**
-     * @var Converter
+     * @var OpenApiV3ToJsonSchemaConverter
      */
     private $converter;
 
@@ -57,7 +56,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
 
     public function __construct(
         string $openApiSchemaFileName,
-        Converter $converter,
+        OpenApiV3ToJsonSchemaConverter $converter,
         SchemaStorage $schemaStorage
     ) {
         $this->converter = $converter;

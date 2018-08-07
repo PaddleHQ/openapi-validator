@@ -3,9 +3,7 @@
   "require": {
     "php": "^7.1",
     "psr/http-message": "^1.0",
-    "justinrainbow/json-schema": "^5.2",
-    "league/json-reference": "dev-master",
-    "hskrasek/openapi-schema-to-json-schema": "^0.2.0"
+    "justinrainbow/json-schema": "^5.2"
   },
   "require-dev": {
     "phpunit/phpunit": "~7.0",

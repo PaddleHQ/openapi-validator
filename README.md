@@ -4,6 +4,23 @@ This package takes an [OpenApi 3](https://github.com/OAI/OpenAPI-Specification/b
 
 This is the used to validate a response that implements the `Psr\Http\Message\ResponseInterface.` interface against a given response in the OpenApi schema.
 
+## Installation
+
+### Library
+
+```bash 
+git clone https://github.com/PaddleHQ/openapi-validator.git
+```
+
+
+### Composer
+
+[Install PHP Composer](https://getcomposer.org/doc/00-intro.md)
+
+```bash
+composer require paddlehq/openapi-validator
+```
+
 ## Usage
 
 ```php
@@ -30,3 +47,9 @@ $validator->validateResponse(
 ```
 
 `$validator->validateResponse` throws a `PaddleHq\OpenApiValidator\Exception\ResponseInvalidException` when the response does not pass the validation.
+
+## Credits
+
+This package largely relies on [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema).
+
+ The code that handles conversion from OpenApi V3 to Json Schema has been taken from [hskrasek/openapi-schema-to-jsonschema](https://github.com/hskrasek/openapi-schema-to-jsonschema)

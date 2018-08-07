@@ -4,7 +4,7 @@ namespace PaddleHq\OpenApiValidator\Tests\Unit;
 
 use JsonSchema\SchemaStorage;
 use PaddleHq\OpenApiValidator\OpenApiV3Validator;
-use HSkrasek\OpenAPI\Converter;
+use PaddleHq\OpenApiValidator\OpenApiV3ToJsonSchemaConverter;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
 
@@ -26,7 +26,7 @@ class OpenApiV3ValidatorTest extends TestCase
 
         $this->validator = new OpenApiV3Validator(
             'file://'.dirname(__DIR__).'/fixtures/openapiv3-schema.json',
-            new Converter(),
+            new OpenApiV3ToJsonSchemaConverter(),
             new SchemaStorage()
         );
     }
