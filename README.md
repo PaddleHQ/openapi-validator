@@ -1,5 +1,7 @@
 # OpenApi Validator
 
+[![Latest Stable Version](https://poser.pugx.org/paddlehq/openapi-validator/v/stable)](https://packagist.org/packages/paddlehq/openapi-validator) [![Total Downloads](https://poser.pugx.org/paddlehq/openapi-validator/downloads)](https://packagist.org/packages/paddlehq/openapi-validator) [![Latest Unstable Version](https://poser.pugx.org/paddlehq/openapi-validator/v/unstable)](https://packagist.org/packages/paddlehq/openapi-validator) [![License](https://poser.pugx.org/paddlehq/openapi-validator/license)](https://packagist.org/packages/paddlehq/openapi-validator) [![Daily Downloads](https://poser.pugx.org/paddlehq/openapi-validator/d/daily)](https://packagist.org/packages/paddlehq/openapi-validator) 
+
 This package takes an [OpenApi 3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) schema file, converts it to a [JSON Schema (draft 4)](http://json-schema.org/specification-links.html#draft-4) so it can be used for validation.
 
 This is the used to validate a response that implements the `Psr\Http\Message\ResponseInterface.` interface against a given response in the OpenApi schema.
