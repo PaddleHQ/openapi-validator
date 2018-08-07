@@ -77,7 +77,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     private function setupSchema()
     {
         $openApiSchema = json_decode(file_get_contents($this->openApiSchemaFileName));
-        $this->schemaStorage->addSchema($this->openApiSchemaFileName, $this->converter->convert($openApiSchema));
+        $this->schemaStorage->addSchema($this->openApiSchemaFileName, $this->converter->convertDocument($openApiSchema));
     }
 
     /**

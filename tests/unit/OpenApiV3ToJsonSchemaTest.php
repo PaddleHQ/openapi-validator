@@ -33,7 +33,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $convertedSchema = $converter->convert(json_decode(json_encode([
+        $convertedSchema = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'required' => ['bar'],
             'properties' => [
@@ -67,7 +67,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'array',
             'items' => [
                 'type' => 'dateTime',
@@ -90,7 +90,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'type' => ['string', 'null'],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'string',
             'nullable' => true,
         ])));
@@ -102,7 +102,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'type' => 'string',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'string',
             'nullable' => false,
         ])));
@@ -122,7 +122,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'type' => 'integer',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'integer',
         ])));
 
@@ -134,7 +134,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'format' => 'int64',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'integer',
             'format' => 'int64',
         ])));
@@ -147,7 +147,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'format' => 'int64',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'long',
         ])));
 
@@ -167,7 +167,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'format' => 'float',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'float',
         ])));
 
@@ -179,7 +179,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'format' => 'double',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'double',
         ])));
 
@@ -190,7 +190,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'type' => 'number',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'number',
         ])));
 
@@ -202,7 +202,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'format' => 'float',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'number',
             'format' => 'float',
         ])));
@@ -227,7 +227,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'properties' => [
                 'prop1' => [
@@ -260,7 +260,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'properties' => [
                 'prop1' => [
@@ -293,7 +293,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'properties' => [
                 'prop1' => [
@@ -327,7 +327,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'required' => ['prop1', 'prop2'],
             'properties' => [
@@ -361,7 +361,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'required' => ['prop1'],
             'properties' => [
@@ -390,7 +390,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             'type' => 'object',
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'properties' => [
                 'prop1' => [
@@ -423,7 +423,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'properties' => [
                 'prop1' => [
@@ -464,7 +464,7 @@ class OpenApiV3ToJsonSchemaConverterTest extends TestCase
             ],
         ]));
 
-        $converted = $converter->convert(json_decode(json_encode([
+        $converted = $converter->convertSingleSchema(json_decode(json_encode([
             'type' => 'object',
             'required' => ['prop2'],
             'properties' => [

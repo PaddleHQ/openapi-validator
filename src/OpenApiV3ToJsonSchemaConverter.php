@@ -49,16 +49,58 @@ class OpenApiV3ToJsonSchemaConverter
     }
 
     /**
+     * Converts a full OpenApi v3 document by finding all schemas within it and converting them
+     *
+     * @param \stdClass|array $document
+     *
+     * @return \stdClass|array
+     */
+    public function convertDocument($document)
+    {
+        $props = is_object($document) ? get_object_vars($document) : $document;
+
+        foreach ($props as $key => $val) {
+            if ($key === 'schemas') {
+                $this->dataSet($document, $key, $this->convertSchemas($val));
+            } elseif ($key === 'schema') {
+                $this->dataSet($document, $key, $this->convertSchema($val));
+            } elseif (is_array($val) || is_object($val)) {
+                $this->dataSet($document, $key, $this->convertDocument($val));
+            }
+        }
+
+        return $document;
+    }
+
+    /**
+     * Convert a standalone schema
+     *
      * @param mixed $schema
      *
      * @return mixed
      */
-    public function convert($schema)
+    public function convertSingleSchema($schema)
     {
         $schema = $this->convertSchema($schema);
         $this->dataSet($schema, '$schema', 'http://json-schema.org/draft-04/schema#');
 
         return $schema;
+    }
+
+    /**
+     * @param mixed $schemas
+     *
+     * @return mixed
+     */
+    private function convertSchemas($schemas)
+    {
+        $props = is_object($schemas) ? get_object_vars($schemas) : $schemas;
+
+        foreach ($props as $schemaKey => $schemaVal) {
+            $this->dataSet($schemas, $schemaKey, $this->convertSingleSchema($schemaVal));
+        }
+
+        return $schemas;
     }
 
     /**
