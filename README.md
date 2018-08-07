@@ -14,7 +14,6 @@ This is the used to validate a response that implements the `Psr\Http\Message\Re
 git clone https://github.com/PaddleHQ/openapi-validator.git
 ```
 
-
 ### Composer
 
 [Install PHP Composer](https://getcomposer.org/doc/00-intro.md)
@@ -30,7 +29,7 @@ use PaddleHq\OpenApiValidator\OpenApiValidatorFactory;
 
 $validatorFactory = new OpenApiValidatorFactory();
 
-$schemaFilePath = __DIR__.'/schema.json';
+$schemaFilePath = __DIR__.'/schema.json'; // See below for example contents of this file
 $validator = $validatorFactory->v3Validator($schemaFilePath);
 
 $response = new Psr7Response();
@@ -46,6 +45,63 @@ $validator->validateResponse(
     $responseCode,
     $contentType
 );
+```
+
+### Example OpenApi v3 Schema file
+
+```json
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Schema Test",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://example.com",
+      "description": "Test Schema"
+    }
+  ],
+  "paths": {
+    "/check/health": {
+      "get": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Health Check.",
+        "description": "Returns an OK",
+        "operationId": "api.check.user",
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthCheck": {
+        "description": "Default response from API server to check health",
+        "properties": {
+          "health": {
+            "description": "expect an OK response",
+            "type": "string"
+          }
+        },
+        "required": ["health"],
+        "type": "object"
+      }
+    }
+  }
+}
 ```
 
 `$validator->validateResponse` throws a `PaddleHq\OpenApiValidator\Exception\InvalidResponseException` when the response does not pass the validation.
