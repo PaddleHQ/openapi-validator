@@ -278,9 +278,9 @@ class OpenApiV3ToJsonSchemaConverter
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed $target
-     * @param  string|array $key
-     * @param  mixed $default
+     * @param mixed        $target
+     * @param string|array $key
+     * @param mixed        $default
      *
      * @return mixed
      *
@@ -301,15 +301,17 @@ class OpenApiV3ToJsonSchemaConverter
                 return $default;
             }
         }
+
         return $target;
     }
+
     /**
      * Set an item on an array or object using dot notation.
      *
-     * @param  mixed $target
-     * @param  string|array $key
-     * @param  mixed $value
-     * @param  bool $overwrite
+     * @param mixed        $target
+     * @param string|array $key
+     * @param mixed        $value
+     * @param bool         $overwrite
      *
      * @return mixed
      *
@@ -345,6 +347,7 @@ class OpenApiV3ToJsonSchemaConverter
                 $target[$segment] = $value;
             }
         }
+
         return $target;
     }
 }
