@@ -4,7 +4,7 @@
   "description": "Validate Responses against an OpenApi v3 schema",
   "keywords": ["openapi","swagger", "json-schema", "psr-7"],
   "homepage": "https://github.com/PaddleHQ/open-api-validator",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Paddle.com",
