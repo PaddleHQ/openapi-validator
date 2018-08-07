@@ -7,7 +7,7 @@ use JsonSchema\SchemaStorage;
 class OpenApiValidatorFactory
 {
     /**
-     * Get a OpenAPI v3 validator for a given schema file
+     * Get a OpenAPI v3 validator for a given schema file.
      *
      * @param string $openApiSchemaFileName
      *
