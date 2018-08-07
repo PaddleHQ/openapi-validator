@@ -6,10 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use stdClass;
 
-class ResponseInvalidException extends Exception
+class InvalidResponseException extends Exception
 {
     /**
-     * ResponseInvalidException constructor.
+     * InvalidResponseException constructor.
      *
      * @param ResponseInterface $response
      * @param stdClass          $openApiV3Response

@@ -85,7 +85,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\InvalidResponseException
      */
     public function testResponseIsInvalidEmpty()
     {
@@ -98,7 +98,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\InvalidResponseException
      */
     public function testResponseIsInvalidWrongType()
     {
@@ -111,7 +111,7 @@ class OpenApiV3ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \PaddleHq\OpenApiValidator\Exception\ResponseInvalidException
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\InvalidResponseException
      */
     public function testResponseIsInvalidMissingRequiredField()
     {
