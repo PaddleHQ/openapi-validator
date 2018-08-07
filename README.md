@@ -46,7 +46,7 @@ $validator->validateResponse(
 );
 ```
 
-`$validator->validateResponse` throws a `PaddleHq\OpenApiValidator\Exception\ResponseInvalidException` when the response does not pass the validation.
+`$validator->validateResponse` throws a `PaddleHq\OpenApiValidator\Exception\InvalidResponseException` when the response does not pass the validation.
 
 ## Credits
 
