@@ -49,7 +49,7 @@ class OpenApiV3ToJsonSchemaConverter
     }
 
     /**
-     * Converts a full OpenApi v3 document by finding all schemas within it and converting them
+     * Converts a full OpenApi v3 document by finding all schemas within it and converting them.
      *
      * @param \stdClass|array $document
      *
@@ -60,9 +60,9 @@ class OpenApiV3ToJsonSchemaConverter
         $props = is_object($document) ? get_object_vars($document) : $document;
 
         foreach ($props as $key => $val) {
-            if ($key === 'schemas') {
+            if ('schemas' === $key) {
                 $this->dataSet($document, $key, $this->convertSchemas($val));
-            } elseif ($key === 'schema') {
+            } elseif ('schema' === $key) {
                 $this->dataSet($document, $key, $this->convertSchema($val));
             } elseif (is_array($val) || is_object($val)) {
                 $this->dataSet($document, $key, $this->convertDocument($val));
@@ -73,7 +73,7 @@ class OpenApiV3ToJsonSchemaConverter
     }
 
     /**
-     * Convert a standalone schema
+     * Convert a standalone schema.
      *
      * @param mixed $schema
      *
