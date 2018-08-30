@@ -92,7 +92,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         int $responseCode,
         string $contentType = 'application/json'
     ): bool {
-        if ($this->emptyResponseExpected($responseCode)) {
+        if (!$this->emptyResponseExpected($responseCode)) {
             $responseSchemaPath = $this->getResponseSchemaPath($pathName, $method, $responseCode, $contentType);
             $responseJson = json_decode($response->getBody());
             $this->jsonSchemaValidator->validate($responseJson, (object) ['$ref' => $responseSchemaPath]);
@@ -248,8 +248,8 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      *
      * @return bool
      */
-    private function emptyResponseExpected($responseCode)
+    private function emptyResponseExpected($responseCode): bool
     {
-        return 204 !== $responseCode;
+        return 204 === $responseCode;
     }
 }
