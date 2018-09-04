@@ -92,9 +92,11 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         int $responseCode,
         string $contentType = 'application/json'
     ): bool {
-        $responseSchemaPath = $this->getResponseSchemaPath($pathName, $method, $responseCode, $contentType);
-        $responseJson = json_decode($response->getBody());
-        $this->jsonSchemaValidator->validate($responseJson, (object) ['$ref' => $responseSchemaPath]);
+        if (!$this->emptyResponseExpected($responseCode)) {
+            $responseSchemaPath = $this->getResponseSchemaPath($pathName, $method, $responseCode, $contentType);
+            $responseJson = json_decode($response->getBody());
+            $this->jsonSchemaValidator->validate($responseJson, (object) ['$ref' => $responseSchemaPath]);
+        }
 
         if (!$this->jsonSchemaValidator->isValid()) {
             throw new InvalidResponseException($response, $this->schemaStorage->resolveRef($responseSchemaPath), $this->jsonSchemaValidator->getErrors());
@@ -239,5 +241,15 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         $this->currentContentType = $contentType;
 
         return $this;
+    }
+
+    /**
+     * @param string $responseCode
+     *
+     * @return bool
+     */
+    private function emptyResponseExpected($responseCode): bool
+    {
+        return 204 === $responseCode;
     }
 }

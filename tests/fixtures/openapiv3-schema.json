@@ -31,6 +31,19 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Checks"
+        ],
+        "summary": "Post Check.",
+        "description": "Returns a empty 204",
+        "operationId": "api.check.post",
+        "responses": {
+          "204": {
+            "description": "Empty Success response"
+          }
+        }
       }
     }
   },

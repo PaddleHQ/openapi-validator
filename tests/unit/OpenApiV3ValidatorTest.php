@@ -134,4 +134,16 @@ class OpenApiV3ValidatorTest extends TestCase
             )
         );
     }
+
+    public function testEmptyResponseIsValid()
+    {
+        $this->assertTrue(
+            $this->validator->validateResponse(
+                $this->mockResponse(204, []),
+                '/check/health',
+                'POST',
+                204
+            )
+        );
+    }
 }
