@@ -146,4 +146,16 @@ class OpenApiV3ValidatorTest extends TestCase
             )
         );
     }
+
+    public function testValidatorDropsQueryString()
+    {
+        $this->assertTrue(
+            $this->validator->validateResponse(
+                $this->mockResponse(200, ['health' => 'ok']),
+                '/check/health?thisis=fine',
+                'GET',
+                200
+            )
+        );
+    }
 }
