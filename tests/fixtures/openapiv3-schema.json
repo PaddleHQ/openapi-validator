@@ -39,6 +39,16 @@
         "summary": "Post Check.",
         "description": "Returns a empty 204",
         "operationId": "api.check.post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCheckRequest"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "204": {
             "description": "Empty Success response"
@@ -58,6 +68,17 @@
           }
         },
         "required": ["health"],
+        "type": "object"
+      },
+      "PostCheckRequest": {
+        "description": "Default request for post check",
+        "properties": {
+          "test": {
+            "description": "expect a string",
+            "type": "string"
+          }
+        },
+        "required": ["test"],
         "type": "object"
       }
     }
