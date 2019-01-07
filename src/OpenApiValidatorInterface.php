@@ -3,6 +3,7 @@
 namespace PaddleHq\OpenApiValidator;
 
 use PaddleHq\OpenApiValidator\Exception\InvalidResponseException;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 interface OpenApiValidatorInterface
@@ -27,6 +28,18 @@ interface OpenApiValidatorInterface
         string $pathName,
         string $method,
         int $responseCode,
-        string $contentType
+        string $contentType = 'application/json'
+    ): bool;
+
+    /**
+     * Validate a response against the OpenApi schema.
+     *
+     * {@inheritdoc}
+     */
+    public function validateRequest(
+        RequestInterface $response,
+        string $pathName,
+        string $method,
+        string $contentType = 'application/json'
     ): bool;
 }

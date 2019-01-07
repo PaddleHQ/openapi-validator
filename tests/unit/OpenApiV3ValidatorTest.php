@@ -2,6 +2,7 @@
 
 namespace PaddleHq\OpenApiValidator\Tests\Unit;
 
+use GuzzleHttp\Psr7\Request;
 use JsonSchema\SchemaStorage;
 use PaddleHq\OpenApiValidator\OpenApiV3Validator;
 use PaddleHq\OpenApiValidator\OpenApiV3ToJsonSchemaConverter;
@@ -18,6 +19,17 @@ class OpenApiV3ValidatorTest extends TestCase
     private function mockResponse(int $statusCode, array $responseBody = []): Response
     {
         return new Response($statusCode, [], json_encode($responseBody));
+    }
+
+    private function mockRequest(
+        string $path,
+        string $method,
+        array $requestBody = [],
+        array $requestHeaders = []
+    ): Request
+    {
+        $requestHeaders['Content-Type'] = 'application/json';
+        return new Request($method, $path, $requestHeaders, json_encode($requestBody));
     }
 
     public function setUp()
@@ -155,6 +167,18 @@ class OpenApiV3ValidatorTest extends TestCase
                 '/check/health?thisis=fine',
                 'GET',
                 200
+            )
+        );
+    }
+
+    public function testItValidatesARequest()
+    {
+        $path = '/check/health?thisis=fine';
+        $method = 'post';
+        $requestBody = ['test' => 'perfect'];
+        $this->assertTrue(
+            $this->validator->validateRequest(
+                $this->mockRequest($path, $method, $requestBody), $path, 'POST'
             )
         );
     }
