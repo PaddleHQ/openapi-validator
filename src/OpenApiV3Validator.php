@@ -120,7 +120,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
      * {@inheritdoc}
      */
     public function validateRequest(
-        RequestInterface $response,
+        RequestInterface $request,
         string $pathName,
         string $method,
         string $contentType = 'application/json'
@@ -128,11 +128,11 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         $this->isResponse = false;
 
         $requestSchemaPath = $this->getRequestBodySchemaPath($this->sanitizePathName($pathName), $method, $contentType);
-        $requestJson = json_encode($response->getBody());
+        $requestJson = json_encode($request->getBody());
         $this->jsonSchemaValidator->validate($requestJson, (object) ['$ref' => $requestSchemaPath]);
 
         if (!$this->jsonSchemaValidator->isValid()) {
-            throw new InvalidRequestException($response, $this->schemaStorage->resolveRef($requestSchemaPath), $this->jsonSchemaValidator->getErrors());
+            throw new InvalidRequestException($request, $this->schemaStorage->resolveRef($requestSchemaPath), $this->jsonSchemaValidator->getErrors());
         }
 
         return true;

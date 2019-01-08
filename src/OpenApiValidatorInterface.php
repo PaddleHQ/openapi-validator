@@ -37,7 +37,7 @@ interface OpenApiValidatorInterface
      * {@inheritdoc}
      */
     public function validateRequest(
-        RequestInterface $response,
+        RequestInterface $request,
         string $pathName,
         string $method,
         string $contentType = 'application/json'
