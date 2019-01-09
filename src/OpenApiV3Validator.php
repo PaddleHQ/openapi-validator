@@ -128,7 +128,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         $this->isResponse = false;
 
         $requestSchemaPath = $this->getRequestBodySchemaPath($this->sanitizePathName($pathName), $method, $contentType);
-        $requestJson = json_encode($request->getBody());
+        $requestJson = json_decode($request->getBody());
         $this->jsonSchemaValidator->validate($requestJson, (object) ['$ref' => $requestSchemaPath]);
 
         if (!$this->jsonSchemaValidator->isValid()) {
