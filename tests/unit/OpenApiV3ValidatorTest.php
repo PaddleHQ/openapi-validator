@@ -171,15 +171,26 @@ class OpenApiV3ValidatorTest extends TestCase
         );
     }
 
-    public function testItValidatesARequest()
+    public function testItValidatesRequests()
     {
         $path = '/check/health?thisis=fine';
-        $method = 'post';
+        $method = 'POST';
         $requestBody = ['test' => 'perfect'];
-        $this->assertTrue(
-            $this->validator->validateRequest(
-                $this->mockRequest($path, $method, $requestBody), $path, 'POST'
-            )
-        );
+        $request = $this->mockRequest($path, $method, $requestBody);
+        $result = $this->validator->validateRequest($request, $path, $method);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @expectedException \PaddleHq\OpenApiValidator\Exception\InvalidRequestException
+     */
+    public function testRequestIsInvalidMissingRequiredField()
+    {
+        $path = '/check/health?thisis=fine';
+        $method = 'POST';
+        $requestBody = ['other-field' => 'ok'];
+        $request = $this->mockRequest($path, $method, $requestBody);
+        $result = $this->validator->validateRequest($request, $path, $method);
+        $this->assertTrue($result);
     }
 }
