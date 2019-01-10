@@ -33,7 +33,7 @@ interface OpenApiValidatorInterface
     ): bool;
 
     /**
-     * Validate a response against the OpenApi schema.
+     * Validate a request against the OpenApi schema.
      *
      * @param RequestInterface $request
      * @param string $pathName
