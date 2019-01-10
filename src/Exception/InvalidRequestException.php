@@ -2,7 +2,7 @@
 
 namespace PaddleHq\OpenApiValidator\Exception;
 
-
+use PaddleHq\OpenApiValidator\SchemaError;
 use Psr\Http\Message\RequestInterface;
 use stdClass;
 use Throwable;
@@ -10,13 +10,18 @@ use Throwable;
 class InvalidRequestException extends \Exception
 {
     /**
+     * @var array|SchemaError[]
+     */
+    private $errors;
+
+    /**
      * InvalidResponseException constructor.
      *
-     * @param ResponseInterface $response
-     * @param stdClass          $openApiV3Response
-     * @param array             $errors
-     * @param int               $code
-     * @param Throwable|null    $previous
+     * @param RequestInterface $request
+     * @param stdClass         $openApiV3Response
+     * @param array            $errors
+     * @param int              $code
+     * @param Throwable|null   $previous
      */
     public function __construct(
         RequestInterface $request,
@@ -25,6 +30,8 @@ class InvalidRequestException extends \Exception
         int $code = 0,
         Throwable $previous = null
     ) {
+        $this->errors = $this->convertErrorsToObjects($errors);
+
         $message = sprintf(
             "Response does not match OpenAPI specification\n%s\n\nExpected Schema:\n%s\n\nActual Response:\n%s",
             $this->formatErrors($errors),
@@ -32,6 +39,14 @@ class InvalidRequestException extends \Exception
             $request->getBody()
         );
         parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * @return SchemaError[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -55,5 +70,21 @@ class InvalidRequestException extends \Exception
                 $errors
             )
         );
+    }
+
+    /**
+     * @param array $errors
+     *
+     * @return SchemaError[]
+     */
+    private function convertErrorsToObjects(array $errors): array
+    {
+        return array_map(function ($error) {
+            return new SchemaError(
+                $error['constraint'],
+                $error['property'],
+                $error['message']
+            );
+        }, $errors);
     }
 }

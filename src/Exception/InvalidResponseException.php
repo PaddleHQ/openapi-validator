@@ -2,12 +2,18 @@
 
 namespace PaddleHq\OpenApiValidator\Exception;
 
+use PaddleHq\OpenApiValidator\SchemaError;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use stdClass;
 
 class InvalidResponseException extends Exception
 {
+    /**
+     * @var array|SchemaError[]
+     */
+    private $errors;
+
     /**
      * InvalidResponseException constructor.
      *
@@ -24,6 +30,8 @@ class InvalidResponseException extends Exception
         int $code = 0,
         Throwable $previous = null
     ) {
+        $this->errors = $this->convertErrorsToObjects($errors);
+
         $message = sprintf(
             "Response does not match OpenAPI specification\n%s\n\nExpected Schema:\n%s\n\nActual Response:\n%s",
             $this->formatErrors($errors),
@@ -31,6 +39,14 @@ class InvalidResponseException extends Exception
             $response->getBody()
         );
         parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * @return SchemaError[]
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     /**
@@ -54,5 +70,20 @@ class InvalidResponseException extends Exception
                 $errors
             )
         );
+    }
+
+    /**
+     * @param array $errors
+     * @return SchemaError[]
+     */
+    private function convertErrorsToObjects(array $errors): array
+    {
+        return array_map(function ($error) {
+            return new SchemaError(
+                $error['constraint'],
+                $error['property'],
+                $error['message']
+            );
+        }, $errors);
     }
 }
