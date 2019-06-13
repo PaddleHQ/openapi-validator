@@ -14,10 +14,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class OpenApiV3Validator implements OpenApiValidatorInterface
 {
-    /**
-     * @var OpenApiV3ToJsonSchemaConverter
-     */
-    private $converter;
 
     /**
      * @var JsonSchemaValidator
@@ -55,29 +51,18 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     private $openApiSchemaFileName;
 
     /**
-     * @param string                         $openApiSchemaFileName
+     * @param string $openApiSchemaFileName
      * @param OpenApiV3ToJsonSchemaConverter $converter
-     * @param SchemaStorage                  $schemaStorage
+     * @param SchemaStorage $schemaStorage
      */
     public function __construct(
         string $openApiSchemaFileName,
-        OpenApiV3ToJsonSchemaConverter $converter,
         SchemaStorage $schemaStorage
-    ) {
-        $this->converter = $converter;
+    )
+    {
         $this->openApiSchemaFileName = $openApiSchemaFileName;
         $this->schemaStorage = $schemaStorage;
-        $this->setupSchema();
         $this->jsonSchemaValidator = new JsonSchemaValidator(new Factory($this->schemaStorage));
-    }
-
-    /**
-     * Converts OpenApi v3 schema to json schema draft 4, adds it to storage.
-     */
-    private function setupSchema()
-    {
-        $openApiSchema = json_decode(file_get_contents($this->openApiSchemaFileName));
-        $this->schemaStorage->addSchema($this->openApiSchemaFileName, $this->converter->convertDocument($openApiSchema));
     }
 
     /**
@@ -91,11 +76,12 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
         string $method,
         int $responseCode,
         string $contentType = 'application/json'
-    ): bool {
+    ): bool
+    {
         if (!$this->emptyResponseExpected($responseCode)) {
             $responseSchemaPath = $this->getResponseSchemaPath(preg_replace('/\?.*/', '', $pathName), $method, $responseCode, $contentType);
             $responseJson = json_decode($response->getBody());
-            $this->jsonSchemaValidator->validate($responseJson, (object) ['$ref' => $responseSchemaPath]);
+            $this->jsonSchemaValidator->validate($responseJson, (object)['$ref' => $responseSchemaPath]);
         }
 
         if (!$this->jsonSchemaValidator->isValid()) {
@@ -108,7 +94,7 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     /**
      * @param string $pathName
      * @param string $method
-     * @param int    $responseCode
+     * @param int $responseCode
      * @param string $contentType
      *
      * @return string
@@ -252,4 +238,5 @@ class OpenApiV3Validator implements OpenApiValidatorInterface
     {
         return 204 === $responseCode;
     }
+
 }

@@ -8,6 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 class OpenApiValidatorFactoryTest extends TestCase
 {
+
+    /**
+     * @var OpenApiValidatorFactory
+     */
+    private $factory;
+
     public function setUp()
     {
         parent::setUp();
@@ -19,7 +25,7 @@ class OpenApiValidatorFactoryTest extends TestCase
     {
         $this->assertInstanceOf(
             OpenApiV3Validator::class,
-            $this->factory->v3Validator('file://'.dirname(__DIR__).'/fixtures/openapiv3-schema.json')
+            $this->factory->v3Validator('file://' . dirname(__DIR__) . '/fixtures/openapiv3-schema.json')
         );
     }
 
@@ -30,7 +36,15 @@ class OpenApiValidatorFactoryTest extends TestCase
     {
         $this->assertInstanceOf(
             OpenApiV3Validator::class,
-            $this->factory->v3Validator('file://'.dirname(__DIR__).'/fixtures/doesnt-exist.json')
+            $this->factory->v3Validator('file://' . dirname(__DIR__) . '/fixtures/doesnt-exist.json')
+        );
+    }
+
+    public function testV3ValidatorFromSchemaSuccess()
+    {
+        $this->assertInstanceOf(
+            OpenApiV3Validator::class,
+            OpenApiValidatorFactory::v3ValidatorFromSchema((object)[])
         );
     }
 }
